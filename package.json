@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "test:backend": "node src/index.js"
+    "test:e2e:backend": "node --env-file=.e2e.env ./src/index.js"
   },
   "author": "",
   "license": "ISC",
