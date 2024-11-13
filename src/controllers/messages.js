@@ -1,8 +1,9 @@
 let messages = {
-    "pepe": [{ message: "HOLA!" }]
+    "pepe": "HOLA!" 
 };
 
 function setMessages(messagesToLoad) {
+    console.log("MESSAGES LOADED: ", messagesToLoad)
     messages = messagesToLoad
 }
 
@@ -10,8 +11,8 @@ function setMessages(messagesToLoad) {
 function getMessage(device) {
     let message;
     try {
-        message = messages[device][0]
-        messages[device] = []
+        message = messages[device]
+        messages[device] = ""
     } catch(error) {
         throw error
     }
