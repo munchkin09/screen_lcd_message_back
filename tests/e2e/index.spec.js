@@ -13,17 +13,18 @@ describe('Backend behaviour', () => {
 
     test('a', async () => {
         const response = { body: "message" };
-        const realResponse = await fetch('http://localhost:3000/api/v1/test');
+        const realResponse = await fetch('http://localhost:3000/api/v1/messages');
+        console.log(realResponse)
     });
 });
 
 let server;
 
 async function runServer (port) {
-    server = exec('npm run test:backend')
+    server = exec('node --run test:backend')
 
 }
 
 async function stopServer() {
-    setTimeout(() => server.kill(), 700);
+    setTimeout(() => server.kill(), 1000);
 }
