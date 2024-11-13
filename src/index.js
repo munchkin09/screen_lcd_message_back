@@ -1,18 +1,26 @@
-const express = require('express');
-const app = express(); // Initialize the Express App
+const { cwd } = require('process');
+const fs = require('fs/promises')
+const path = require('path');
 
-const { buildV1Routes }= require('./routes');
+const port = process.env.PORT;
+const apiKey = process.env.API_KEY;
+const messagesPath = process.env.MESSAGES;
+
 const { messagesController } = require('./controllers');
+const { startServer } = require('./server');
+let messages = {};
 
-const port = 3000;
+(async () => {
+    const normalizedPath = path.resolve(cwd(), messagesPath)
+    const plainMessages = (await fs.readFile(normalizedPath, 'utf8')).split('\n')
 
-app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
+    plainMessages.forEach(rawMessage => {
+        const [device, message] = rawMessage.split('|')
+        messages[device] = message;
+    })
 
-const routesV1 = buildV1Routes(messagesController)
-app.use("/api/v1/", routesV1);
+    messagesController.setMessages(messages)
+    await startServer(port, apiKey, messagesController)
+})()
 
-app.listen(port, () => console.log(`Listening on port ${port}`));
+
