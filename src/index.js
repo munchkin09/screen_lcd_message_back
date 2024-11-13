@@ -1,7 +1,10 @@
 const express = require('express');
 const app = express(); // Initialize the Express App
 
-const {router} = require('./routes')
+const { buildV1Routes }= require('./routes');
+const { messagesController } = require('./controllers');
+
+const port = 3000;
 
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
@@ -9,7 +12,7 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use("/api/v1/", router);
+const routesV1 = buildV1Routes(messagesController)
+app.use("/api/v1/", routesV1);
 
-const port = 3000;
 app.listen(port, () => console.log(`Listening on port ${port}`));
