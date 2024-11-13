@@ -1,0 +1,2 @@
+test_device1|Hola, este es un mensaje de prueba cargado desde un fichero
+test_device2|Mensaje para otro dispositivo.
