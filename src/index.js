@@ -10,7 +10,15 @@ const { messagesController } = require('./controllers');
 const { startServer } = require('./server');
 let messages = {};
 
+
+//Entry point for backend startup
 (async () => {
+    await setupMessages()
+    await startServer(port, apiKey, messagesController)
+})()
+
+
+async function setupMessages() {
     const normalizedPath = path.resolve(cwd(), messagesPath)
     const plainMessages = (await fs.readFile(normalizedPath, 'utf8')).split('\n')
 
@@ -18,9 +26,8 @@ let messages = {};
         const [device, message] = rawMessage.split('|')
         messages[device] = message;
     })
-
     messagesController.setMessages(messages)
-    await startServer(port, apiKey, messagesController)
-})()
+
+}
 
 
