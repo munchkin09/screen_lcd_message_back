@@ -17,5 +17,5 @@ npm run test
 
 - Put server running on local with default config
 ```
-npm run test:e2e:backend
+npm run dev:backend
 ```
