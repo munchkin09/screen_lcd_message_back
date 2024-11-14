@@ -44,7 +44,7 @@ async function buildLogger(mode, logName) {
     }
 
     function formatMessage(header, msg) {
-        if (typeof msg === Object) {
+        if (typeof msg === 'object') {
             msg = JSON.stringify(msg, null, 4);
         }
         return header + msg
