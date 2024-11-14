@@ -14,7 +14,12 @@ describe("Backend behaviour", () => {
 
         await runServer("npm run test:e2e:backend")
 
-        const response = (await (await fetch("http://localhost:3000/api/v1/messages?device=test_device1")).json()).message;
+        const response = (await (await fetch("http://localhost:3000/api/v1/messages?device=test_device1", {
+            method: "GET",
+            headers: {
+                apiKey: '111111111'
+            }
+        })).json()).message;
 
         expect(response).toStrictEqual(expectedResponse)
     });
