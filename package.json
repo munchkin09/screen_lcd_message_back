@@ -7,7 +7,9 @@
     "test": "jest",
     "dev:backend": "node --env-file=.e2e-development.env ./src/index.js",
     "test:e2e:backend": "node --env-file=.e2e.env ./src/index.js",
-    "test:e2e:backend-error": "node --env-file=.e2e-error.env ./src/index.js"
+    "test:e2e:backend-messages-no-path": "node --env-file=.e2e-error.env ./src/index.js",
+    "test:e2e:backend-no-port": "node --env-file=.e2e-error-port.env ./src/index.js"
+
   },
   "author": "",
   "license": "ISC",
