@@ -1,5 +1,3 @@
-const { buildMessagesController } = require(".");
-
 let messages = {
     "pepe": "HOLA!" 
 };
