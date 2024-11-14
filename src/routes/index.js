@@ -1,14 +1,15 @@
 const router = require('express').Router()
 
-function buildV1Routes(messagesController) {
+function buildV1Routes(apiKey, logger, messagesController) {
     router.all('/messages', (req, res, next) => {
-        console.log("IM a logger")
+        //Do your validations here
+        logger.log("IM a logger on middleware")
         next();
     });
     
     router.get('/messages',async (req, res, next) => {
         let message;
-        console.log(req.params)
+        logger.log(req.params)
         try {
             message = await messagesController.getMessage(req.query.device)
     
