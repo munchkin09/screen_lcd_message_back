@@ -4,12 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
-    "dev:backend": "node --env-file=.development.env ./src/index.js",
-    "test:e2e:backend": "node --env-file=.e2e.env ./src/index.js",
-    "test:e2e:backend-messages-no-path": "node --env-file=.e2e-error.env ./src/index.js",
-    "test:e2e:backend-no-port": "node --env-file=.e2e-error-port.env ./src/index.js"
-
+    "test": "node --experimental-sqlite node_modules/jest/bin/jest.js",
+    "dev:backend": "node --experimental-sqlite --env-file=.development.env ./src/index.js",
+    "test:e2e:backend": "node --experimental-sqlite --env-file=.e2e.env ./src/index.js",
+    "test:e2e:backend-messages-no-path": "node --experimental-sqlite --env-file=.e2e-error.env ./src/index.js",
+    "test:e2e:backend-no-port": "node --experimental-sqlite --env-file=.e2e-error-port.env ./src/index.js"
   },
   "author": "",
   "license": "ISC",
