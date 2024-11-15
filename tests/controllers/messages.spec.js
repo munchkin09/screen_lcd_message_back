@@ -1,4 +1,4 @@
-const { buildMessagesController } = require('../src/controllers/messages')
+const { buildMessagesController } = require('../../src/controllers/messages')
 
 const fakeLog = {
     log: jest.fn(),
@@ -10,8 +10,8 @@ const fakeLog = {
 describe('Utests for messages controller logic', () => {
     test('Should load a list of messages', () => {
         const messagesFixtures = { test_1: "testing message set" }
-        const messagesController = buildMessagesController(fakeLog)
-        messagesController.setMessages(messagesFixtures)
+        const messagesController = buildMessagesController(fakeLog);
+        messagesController.setMessages(messagesFixtures);
 
         expect(messagesController.getMessage("test_1")).toStrictEqual("testing message set")
     })
