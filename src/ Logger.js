@@ -1,10 +1,13 @@
-const fs = require('fs')
-const path = require('path')
+const fs = require('fs');
+const { mkdtemp } = require('fs/promises');
+const { join, resolve } = require('path');
+const { tmpdir } = require('node:os');
 
 async function buildLogger(mode, logName) {
     let fileHandlerLogger;
     if (mode === 'file') {
-        const logFilePath = path.resolve('/tmp',`${Date.now().toString()}_${logName}`);
+        const tmpFilePath = await mkdtemp(join(tmpdir(), 'lcd_back'));
+        const logFilePath = resolve(tmpFilePath, `${Date.now().toString()}_${logName}`);
         console.log(`Path for file log is: ${logFilePath}`);
         fileHandlerLogger = fs.createWriteStream(logFilePath, {
             flags: "a",
