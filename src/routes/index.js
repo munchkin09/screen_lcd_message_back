@@ -1,27 +1,51 @@
-const router = require('express').Router()
+const router = require('express').Router();
+const { body, header, validationResult } = require("express-validator");
 
-function buildV1Routes(apiKey, logger, messagesController) {
-    router.all('/messages', (req, res, next) => {
-        //Do your validations here
+function buildV1Routes(key, logger, messagesController) {
+    const apiKey = key;
+    router.all('/messages', [
+            [
+            header("apikey").equals(apiKey)
+            ]
+        ], 
+        (req, res, next) => {
         logger.info(`Request make. Headers associated => ${JSON.stringify(req.headers, null, 4)}`)
-
-        if (!req.headers.apikey) {
-            return res.status(400).end()
+        
+        const errors = validationResult(req);
+  
+        
+        if (errors.isEmpty()) {
+            return next();
         }
 
-        if (req.headers.apikey !== apiKey) {
-            return res.status(400).end()
-        }
-
-        next();
+        res.status(400).end();
     });
     
     router.get('/messages',async (req, res, next) => {
         let message;
-        logger.log(req.params)
+
         try {
-            message = await messagesController.getMessage(req.query.device)
+            message = await messagesController.getMessages(req.query.device)
+            logger.info(message);
+        } catch(error) {
+            logger.error(error);
+            return next(error);
+        }
     
+        return res.status(200).json({
+            message
+        });
+    })
+
+    router.post('/messages', [
+            [
+            body("message").notEmpty().trim()
+            ],
+        ], async (req, res, next) => {
+        const message = req.body.message.toString();
+
+        try {
+            await messagesController.insert(message)
         } catch(error) {
             return next(error)
         }
