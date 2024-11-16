@@ -1,34 +1,25 @@
-let messages = {
-    "pepe": "HOLA!" 
-};
 
 module.exports = {
-    buildMessagesController: function(logger) {
+    buildMessagesController: (logger, messagesRepository) => {
 
-        const messagesController = {
-            setMessages,
-            getMessage,
-            
+        return {
+            setMessage: insert,
+            getMessages: read
         };
 
-        return messagesController;
-
-        function setMessages(messagesToLoad) {
-            logger.log(`MESSAGES LOADED: ${JSON.stringify(messagesToLoad, null, 4)}`);
-            messages = messagesToLoad;
+        async function insert(message) {
+            logger.log(`New message to broadcast: ${JSON.stringify(message, null, 4)}`);
+            await messagesRepository.create(message);
         }
 
-        function getMessage(device) {
-
-            let message;
+        async function read(device) {
+            let messages;
             try {
-                message = messages[device];
-                messages[device] = "";
+                messages = await messagesRepository.read(device);
             } catch(error) {
                 throw error;
             }
-
-            return message;
+            return messages;
         }
     }
 

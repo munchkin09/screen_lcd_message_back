@@ -24,8 +24,8 @@ let logger;
     }
 
     logger = await buildLogger('file', logName);
-    const { devices, messages } = await buildRepositories(logger, dbPath);
-    const messagesController = buildMessagesController(logger, devices, messages);
+    const { devicesRepository, messagesRepository } = await buildRepositories(logger, dbPath);
+    const messagesController = buildMessagesController(logger, messagesRepository);
 
     await startServer(port, apiKey, logger, messagesController);
 

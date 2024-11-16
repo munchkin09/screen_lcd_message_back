@@ -1,7 +1,10 @@
 const { createTable, checkTable, createMessage, readMessages } = require('./sql_statements/sql_messages');
 
-async function buildMessagesRepository(logger, db, devices) {
+async function buildMessagesRepository(log, db, devices) {
   const database = db;
+  const logger = log;
+  console.log("buildMessagesRepository");
+  console.log(logger);
   return {
     create,
     read
@@ -27,8 +30,10 @@ async function buildMessagesRepository(logger, db, devices) {
     return new Promise((resolve, reject) => {
       let messages;
       try {
+        
         const readStatement = database.prepare(readMessages)
-        messages = readStatement.run(device);
+        messages = readStatement.all(device);
+        logger.info("Data retrieved from DB:");
       } catch (error) {
         logger.error(`[MessagesRepository-read]\n${JSON.stringify(error)}`);
         return reject(error);
