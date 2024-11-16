@@ -9,10 +9,15 @@ const fakeLog = {
 
 describe('Utests for messages controller logic', () => {
     test('Should load a list of messages', () => {
-        const messagesFixtures = { test_1: "testing message set" }
-        const messagesController = buildMessagesController(fakeLog);
-        messagesController.setMessages(messagesFixtures);
+        const messagesFixtures = "testing message set";
+        const fakeMsgRepository = {
+            create: jest.fn(),
+            read: jest.fn()
+        }
 
-        expect(messagesController.getMessage("test_1")).toStrictEqual("testing message set")
-    })
-})
+        const messagesController = buildMessagesController(fakeLog, fakeMsgRepository);
+        messagesController.setMessage(messagesFixtures);
+
+        expect(fakeMsgRepository.create).toHaveBeenCalledWith(messagesFixtures)
+    });
+});

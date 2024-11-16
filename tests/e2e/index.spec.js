@@ -65,8 +65,7 @@ function stopServer() {
 }
 
 function removeDB() {
-    return new ProcessingInstruction((res) => {
-        console.log(process.env.DB);
+    return new Promise((res) => {
         res();
     })
 }
