@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express(); // Initialize the Express App
 
-const { print } = require('./utils');
 const { buildV1Routes } = require('./routes');
 
 module.exports = {
@@ -17,7 +16,6 @@ module.exports = {
         app.use("/api/v1/", routesV1);
 
         app.listen(port, () => {
-            app._router.stack.forEach(print.bind(null, []))
             logger.info(`Listening on port ${port}`)
         });
 
