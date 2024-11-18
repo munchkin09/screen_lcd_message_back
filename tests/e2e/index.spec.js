@@ -8,7 +8,9 @@ describe("Backend behaviour", () => {
     })
 
     test("Happy path, should work flawlessly", async () => {
-        const expectedResponse = "Hola, este es un mensaje de prueba cargado desde un fichero";
+        const expectedResponse = [{ message: "Hola, este es un mensaje de prueba cargado desde un fichero" },
+            { message: "ESTO ES UN MENSAJE RECIBIDO POR API" }
+        ];
         await runServer("npm run test:e2e:backend")
 
         const response = (await (await fetch("http://localhost:3000/api/v1/messages?device=test_device1", {
@@ -18,13 +20,13 @@ describe("Backend behaviour", () => {
             }
         })).json()).message;
 
-        expect(response).toStrictEqual(expectedResponse)
+        expect(response).toEqual(expectedResponse)
     });
 
     describe("Error handling", () => {
         test("Should no start when no DB path is given", async () => {
             const expectedError = "DB path is not valid, should be absolute path or relative to execution folder";
-            const executionOutput = await runServer("npm run test:e2e:backend-messages-no-path");
+            const executionOutput = await runServer("npm run test:e2e:backend-db-no-path");
 
             expect(executionOutput).toStrictEqual(expect.stringContaining(expectedError));
 
@@ -64,6 +66,7 @@ function stopServer() {
     })
 }
 
+//TODO DB Teardown
 function removeDB() {
     return new Promise((res) => {
         res();
