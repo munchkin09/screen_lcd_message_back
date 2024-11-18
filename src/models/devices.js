@@ -2,7 +2,7 @@ const { createTable, checkTable, createDevice, readDevices } = require('./sql_st
 
 
 
-async function buildDevicesRepository(logger, db) {
+const buildDevicesRepository = async (logger, db) => {
   const database = db;
   return {
     create,
@@ -16,7 +16,7 @@ async function buildDevicesRepository(logger, db) {
         insertStatement.run(null, device);
       } catch (error) {
         logger.error(`[DevicesRepository-create]\n${JSON.stringify(error)}`);
-        return reject(error);
+        return reject(new Error(error.message));
       }
 
       return resolve();
@@ -28,10 +28,10 @@ async function buildDevicesRepository(logger, db) {
       let devices;
       try {
         const readStatement = database.prepare(readDevices)
-        devices = readStatement.run();
+        devices = readStatement.all();
       } catch (error) {
         logger.error(`[DevicesRepository-read]\n${JSON.stringify(error)}`);
-        return reject(error);
+        return reject(new Error(error.message));
       }
 
       return resolve(devices);
@@ -40,7 +40,7 @@ async function buildDevicesRepository(logger, db) {
 
 }
 
-function initializeDevicesDb(logger, db) {
+const initializeDevicesDb = (logger, db) => {
   const database = db;
   return new Promise(async (resolve, reject) => {
     if ((await checkTableState(database)) === true) {
@@ -52,7 +52,7 @@ function initializeDevicesDb(logger, db) {
     } catch (error) {
       if (error.message !== "table messages already exists") {
         logger.error(`[DevicesRepository-initalizeDb]\n${JSON.stringify(error)}`);
-        return reject(error);
+        return reject(new Error(error.message));
       }
     }
 
@@ -68,7 +68,7 @@ function initializeDevicesDb(logger, db) {
 
       } catch (error) {
         logger.error(`[DevicesRepository-initalizeDb]\n${JSON.stringify(error)}`);
-        return reject(error);
+        return reject(new Error(error.message));
       }
 
       return resolve(result['count'] > 0 ? true : false);

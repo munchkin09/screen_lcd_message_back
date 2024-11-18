@@ -1,24 +1,28 @@
 const { createTable, checkTable, createMessage, readMessages } = require('./sql_statements/sql_messages');
 
-async function buildMessagesRepository(log, db, devices) {
+const buildMessagesRepository = async (log, db, dvcs) => {
   const database = db;
   const logger = log;
-  console.log("buildMessagesRepository");
-  console.log(logger);
+  const devices = dvcs.map(dvc => dvc.name);
   return {
     create,
     read
   }
 
   function create(message) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       try {
         const insertStatement = database.prepare(createMessage)
-        devices.forEach(device => insertStatement.run(null, message, device));
+        await Promise.all(devices.map(device => {
+          return new Promise((resolve, reject) => {
+            insertStatement.run(null, message, device)
+            resolve();
+          })
+        }));
       } catch (error) {
         if (error.message !== "table messages already exists") {
           logger.error(`[MessagesRepository-create]\n${JSON.stringify(error)}`);
-          return reject(error);
+          return reject(new Error(error.message));
         }
       }
 
@@ -36,7 +40,7 @@ async function buildMessagesRepository(log, db, devices) {
         logger.info("Data retrieved from DB:");
       } catch (error) {
         logger.error(`[MessagesRepository-read]\n${JSON.stringify(error)}`);
-        return reject(error);
+        return reject(new Error(error.message));
       }
 
       return resolve(messages);
@@ -45,7 +49,7 @@ async function buildMessagesRepository(log, db, devices) {
 
 }
 
-function initializeMessagesDb(logger, db) {
+const initializeMessagesDb = (logger, db) => {
   const database = db;
   return new Promise(async (resolve, reject) => {
     if ((await checkTableState()) === true) {
@@ -56,8 +60,8 @@ function initializeMessagesDb(logger, db) {
       database.exec(createTable);
     } catch (error) {
       if (error.message !== "table messages already exists") {
-        logger.error(`[DevicesRepository-initalizeDb]\n${JSON.stringify(error)}`);
-        return reject(error);
+        logger.error(`[MessagesRepository-initalizeDb]\n${JSON.stringify(error)}`);
+        return reject(new Error(error.message));
       }
     }
 
@@ -73,7 +77,7 @@ function initializeMessagesDb(logger, db) {
         result = sql.run();
       } catch (error) {
         logger.error(`[MessagesRepository-initalizeDb]\n${JSON.stringify(error)}`);
-        return reject(error);
+        return reject(new Error(error.message));
       }
 
       return resolve(result['count'] > 0 ? true : false);

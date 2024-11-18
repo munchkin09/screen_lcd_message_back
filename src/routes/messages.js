@@ -49,8 +49,7 @@ module.exports = {
             const message = req.body.message.toString();
             
             try {
-                logger.info(messagesController)
-                await messagesController.insert(message)
+                await messagesController.setMessage(message)
             } catch(error) {
                 return next(error)
             }
