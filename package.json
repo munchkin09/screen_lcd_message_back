@@ -5,18 +5,20 @@
   "main": "index.js",
   "scripts": {
     "test": "node --experimental-sqlite node_modules/jest/bin/jest.js",
-    "dev:backend": "node --experimental-sqlite --env-file=.development.env ./src/index.js",
+    "dev:backend": "node --env-file=.development.env --experimental-sqlite ./src/index.js",
     "test:e2e:backend": "node --experimental-sqlite --env-file=.e2e.env ./src/index.js",
-    "test:e2e:backend-messages-no-path": "node --experimental-sqlite --env-file=.e2e-error.env ./src/index.js",
+    "test:e2e:backend-messages-no-path": "node --experimental-sqlite --env-file=.e2e-error.env --env-file=.development.env ./src/index.js",
     "test:e2e:backend-no-port": "node --experimental-sqlite --env-file=.e2e-error-port.env ./src/index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "4.21.1",
-    "express-validator": "^7.2.0"
+    "express-validator": "7.2.0"
   },
   "devDependencies": {
-    "jest": "29.7.0"
+    "jest": "29.7.0",
+    "jest-junit": "16.0.0",
+    "jest-silent-reporter": "0.6.0"
   }
 }
