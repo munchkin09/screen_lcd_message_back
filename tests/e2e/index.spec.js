@@ -11,20 +11,21 @@ describe("Backend behaviour", () => {
         const url = "http://localhost:3000/api/v1/messages";
         const postOptions = {
             method: "POST",
-            headers: {apikey: '111111111', 'content-type': 'application/json'},
+            headers: {devId: '', apikey: '111111111', 'content-type': 'application/json'},
             body: '{"message":"Hola, este es un mensaje de prueba cargado desde un fichero"}'
         };
-        const expectedResponse = [{ message: "Hola, este es un mensaje de prueba cargado desde un fichero" }];
-        await runServer("npm run test:e2e:backend");
-        await fetch(url, postOptions);
-        await sleep(600, "");
-
-        const response = (await (await fetch(`${url}?device=test_device1`, {
+        const getOptions = {
             method: "GET",
             headers: {
                 apiKey: "111111111"
             }
-        })).json()).message;
+        };
+        const expectedResponse = [{ message: "Hola, este es un mensaje de prueba cargado desde un fichero" }];
+        await runServer("npm run test:e2e:backend");
+        await fetch(url, postOptions);
+        await sleep(100, "");
+
+        const response = (await (await fetch(url, getOptions)).json()).message;
 
         expect(response).toEqual(expectedResponse);
     });
