@@ -9,23 +9,27 @@ describe("Backend behaviour", () => {
 
     test("Happy path, should work flawlessly", async () => {
         const url = "http://localhost:3000/api/v1/messages";
+        const devId = 'test_device1';
+        const apiKey = "111111111";
+
         const postOptions = {
             method: "POST",
-            headers: {devId: '', apikey: '111111111', 'content-type': 'application/json'},
+            headers: {devId, apiKey, 'content-type': 'application/json'},
             body: '{"message":"Hola, este es un mensaje de prueba cargado desde un fichero"}'
         };
         const getOptions = {
             method: "GET",
             headers: {
-                apiKey: "111111111"
+                devId,
+                apiKey
             }
         };
         const expectedResponse = [{ message: "Hola, este es un mensaje de prueba cargado desde un fichero" }];
         await runServer("npm run test:e2e:backend");
         await fetch(url, postOptions);
-        await sleep(100, "");
+        await sleep(500, "");
 
-        const response = (await (await fetch(url, getOptions)).json()).message;
+        const response = (await (await fetch(url, getOptions)).json()).messages;
 
         expect(response).toEqual(expectedResponse);
     });
@@ -55,11 +59,9 @@ let server;
 async function runServer (command) {
     let stdoutReturned;
     server = exec(command, (error, stdout, stderr) => {
-        console.log(stdout);
         stdoutReturned = stdout;
-        
     });
-    await sleep(300);
+    await sleep(400);
     return stdoutReturned;
 
 }
@@ -69,7 +71,7 @@ function stopServer() {
         setTimeout(() => {
             server.kill()
             res()
-        }, 300);
+        }, 450);
     })
 }
 
