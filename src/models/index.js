@@ -9,8 +9,6 @@ module.exports = async function buildRepositories(logger, dbPath) {
     logger.info("Operating DB on PATH[" + path.resolve(dbPath) + "]");
     database = new sqlite.DatabaseSync(path.resolve(dbPath));
 
-    logger.warn(database);
-
     await initializeDevicesDb(logger, database)
     await initializeMessagesDb(logger, database);
 
