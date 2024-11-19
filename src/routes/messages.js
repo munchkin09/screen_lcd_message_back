@@ -6,7 +6,8 @@ module.exports = {
         const messagesController = msgController;
         router.all('/', [
             [
-            header("apikey").equals(apiKey)
+            header("apikey").equals(apiKey),
+            header("devid").notEmpty()
             ]
         ], 
         (req, res, next) => {
@@ -23,10 +24,10 @@ module.exports = {
 
         router.get('/',async (req, res, next) => {
             let message;
-
+            const deviceId = req.headers.devid;
             try {
-                message = await messagesController.getMessages(req.query.device)
-                logger.info(message);
+                message = await messagesController.getMessages(deviceId);
+                await messagesController.deleteMessages(deviceId);
             } catch(error) {
                 logger.error(error);
                 return next(error);
@@ -47,9 +48,9 @@ module.exports = {
                 return next(new Error("Validation error. Message is mandatory"));
             }
             const message = req.body.message.toString();
-            
+
             try {
-                await messagesController.setMessage(message)
+                await messagesController.setMessage(message);
             } catch(error) {
                 return next(error)
             }
