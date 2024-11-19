@@ -8,19 +8,25 @@ describe("Backend behaviour", () => {
     })
 
     test("Happy path, should work flawlessly", async () => {
-        const expectedResponse = [{ message: "Hola, este es un mensaje de prueba cargado desde un fichero" },
-            { message: "ESTO ES UN MENSAJE RECIBIDO POR API" }
-        ];
-        await runServer("npm run test:e2e:backend")
+        const url = "http://localhost:3000/api/v1/messages";
+        const postOptions = {
+            method: "POST",
+            headers: {apikey: '111111111', 'content-type': 'application/json'},
+            body: '{"message":"Hola, este es un mensaje de prueba cargado desde un fichero"}'
+        };
+        const expectedResponse = [{ message: "Hola, este es un mensaje de prueba cargado desde un fichero" }];
+        await runServer("npm run test:e2e:backend");
+        await fetch(url, postOptions);
+        await sleep(600, "");
 
-        const response = (await (await fetch("http://localhost:3000/api/v1/messages?device=test_device1", {
+        const response = (await (await fetch(`${url}?device=test_device1`, {
             method: "GET",
             headers: {
-                apiKey: '111111111'
+                apiKey: "111111111"
             }
         })).json()).message;
 
-        expect(response).toEqual(expectedResponse)
+        expect(response).toEqual(expectedResponse);
     });
 
     describe("Error handling", () => {
@@ -48,12 +54,12 @@ let server;
 async function runServer (command) {
     let stdoutReturned;
     server = exec(command, (error, stdout, stderr) => {
-        stdoutReturned = stdout
+        console.log(stdout);
+        stdoutReturned = stdout;
+        
     });
-
-    return new Promise((res) => {
-        setTimeout(() => res(stdoutReturned), 300);
-    })
+    await sleep(300);
+    return stdoutReturned;
 
 }
 
@@ -71,4 +77,10 @@ function removeDB() {
     return new Promise((res) => {
         res();
     })
+}
+
+function sleep(ms, value) {
+    return new Promise((res) => {
+        setTimeout(() => res(value), ms);
+    });
 }
