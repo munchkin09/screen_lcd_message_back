@@ -34,7 +34,6 @@ async function createWith(message) {
         logger.warn(readMessages);
         const readStatement = database.prepare(readMessages)
         messages = readStatement.all(device);
-        logger.info("Data retrieved from DB:");
       } catch (error) {
         logger.error(`[MessagesRepository-read]\n${JSON.stringify(error)}`);
         return reject(new Error(error.message));
@@ -51,7 +50,6 @@ async function createWith(message) {
         
         const deleteStatement = database.prepare(deleteMessages);
         messages = deleteStatement.run(device);
-        logger.info(`Data deleted from DB for ${device}`);
       } catch (error) {
         logger.error(`[MessagesRepository-read]\n${JSON.stringify(error)}`);
         return reject(new Error(error.message));

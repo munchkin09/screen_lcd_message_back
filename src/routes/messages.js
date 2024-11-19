@@ -12,7 +12,6 @@ module.exports = {
         ], 
         (req, res, next) => {
             logger.info(`Request make. Headers associated => ${JSON.stringify(req.headers, null, 4)}`)
-            logger.info(req.body);
             const errors = validationResult(req);
 
             if (errors.isEmpty()) {
@@ -23,10 +22,10 @@ module.exports = {
         });
 
         router.get('/',async (req, res, next) => {
-            let message;
+            let messages;
             const deviceId = req.headers.devid;
             try {
-                message = await messagesController.getMessages(deviceId);
+                messages = await messagesController.getMessages(deviceId);
                 await messagesController.deleteMessages(deviceId);
             } catch(error) {
                 logger.error(error);
@@ -34,8 +33,8 @@ module.exports = {
             }
 
             return res.status(200).json({
-                message
-            });
+                messages
+            }).end();
         })
 
         router.post('/', [
@@ -55,9 +54,7 @@ module.exports = {
                 return next(error)
             }
 
-            return res.status(200).json({
-                message
-            });
+            return res.status(200).json({ }).end();
         })
 
         return router;
