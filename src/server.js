@@ -7,9 +7,7 @@ module.exports = {
     startServer: async (port, apiKey, logger, messagesController) => {
         app.use(express.json());
         app.use(function (req, res, next) {
-            res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
-            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-            next();
+            setupCORS(req, res, next);
         });
 
         const routesV1 = buildV1Routes(apiKey, logger, messagesController);
@@ -20,4 +18,15 @@ module.exports = {
         });
 
     }
+}
+
+function  setupCORS(req, res, next) {
+    res.header('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'X-Requested-With, Content-type,Accept,X-Access-Token,X-Key, apikey, devid');
+    res.header('Access-Control-Allow-Origin', '*');
+    if (req.method === 'OPTIONS') {
+        res.status(200).end();
+        return;
+    } 
+    return next();
 }
