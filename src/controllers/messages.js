@@ -9,8 +9,9 @@ module.exports = {
         };
 
         async function insert(message) {
-            logger.log(`New message to broadcast: ${JSON.stringify(message, null, 4)}`);
-            await messagesRepository.createWith(message);
+            const formattedMessage = message.trim();
+            logger.log(`New message to broadcast: ${JSON.stringify(formattedMessage, null, 4)}`);
+            await messagesRepository.createWith(formattedMessage);
         }
 
         async function read(device) {

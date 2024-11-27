@@ -6,8 +6,10 @@ const { buildMessagesRepository, initializeMessagesDb } = require('./messages');
 
 let database;
 module.exports = async function buildRepositories(logger, dbPath) {
-    logger.info("Operating DB on PATH[" + path.resolve(dbPath) + "]");
-    database = new sqlite.DatabaseSync(path.resolve(dbPath));
+    let dbToUse = ":memory:";
+    if ( dbPath !== undefined) dbToUse = path.resolve(dbPath);
+    logger.info("Operating DB on [" + dbToUse + "]");
+    database = new sqlite.DatabaseSync(dbToUse);
 
     await initializeDevicesDb(logger, database)
     await initializeMessagesDb(logger, database);

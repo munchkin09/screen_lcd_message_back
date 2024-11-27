@@ -6,6 +6,6 @@ module.exports = {
             name TEXT
         ) STRICT
     `,
-    createDevice: "INSERT INTO devices (key, name) VALUES (?, ?)",
-    readDevices: "SELECT name FROM devices"
+    createDevice: "INSERT INTO devices (name) VALUES (?)",
+    readDevices: "SELECT key, name FROM devices"
 }
