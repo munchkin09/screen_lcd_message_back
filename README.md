@@ -26,7 +26,7 @@ curl --request GET \
     --url http://localhost:3000/api/v1/messages \
     --header 'apikey: 111111111' \
     --header 'content-type: application/json' \
-    --header 'devid: test_device1'
+    --header 'devid: 1'
 ````
 
 
@@ -35,7 +35,7 @@ curl --request POST \
     --url http://localhost:3000/api/v1/messages \
     --header 'apikey: 111111111' \
     --header 'content-type: application/json' \
-    --header 'devid: test_device1' \
+    --header 'devid: 1' \
     --data '{
     "message": "STRING"
     }'
