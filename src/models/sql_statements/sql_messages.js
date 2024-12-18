@@ -3,7 +3,7 @@ module.exports = {
     createTable: `
         CREATE TABLE messages(
             key INTEGER PRIMARY KEY,
-            device INTEGER KEY,
+            device INTEGER,
             message TEXT
         ) STRICT
     `,
