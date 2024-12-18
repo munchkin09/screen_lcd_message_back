@@ -33,7 +33,6 @@ describe('Utests for messages controller logic', () => {
             await setMessage(device2Message);
             await sleep(200);
             const device1Messages = await getMessages(1);
-            console.log(device1Messages);
             const device2Messages = await getMessages(2);
 
             expect(device1Messages).toEqual(expect.arrayContaining([{"message": device1Message}, {"message": device2Message}]));
