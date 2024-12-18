@@ -10,7 +10,7 @@
     "test:e2e:backend-db-no-path": "node --env-file=.e2e-error.env --experimental-sqlite ./src/index.js",
     "test:e2e:backend-no-port": "node --env-file=.e2e-error-port.env --experimental-sqlite ./src/index.js"
   },
-  "author": "",
+  "author": "LEDISMORE inc.",
   "license": "ISC",
   "dependencies": {
     "express": "4.21.1",
