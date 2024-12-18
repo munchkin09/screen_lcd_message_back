@@ -1,4 +1,4 @@
-const { buildMessagesController } = require('./messages')
+const buildMessagesController = require('./messages')
 
 module.exports = {
     buildMessagesController
